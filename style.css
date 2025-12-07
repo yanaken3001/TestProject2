@@ -351,6 +351,8 @@ body {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     white-space: nowrap;
     text-align: center;
+    z-index: 10;
+    /* Ensure clickability */
 }
 
 .glass-btn:hover {
@@ -427,6 +429,8 @@ body {
     display: flex;
     align-items: center;
     overflow: hidden;
+    z-index: 10;
+    /* Ensure clickability */
 }
 
 .option-label {
