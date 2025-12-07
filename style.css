@@ -14,6 +14,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    /* Remove mobile tap highlight */
 }
 
 body {
@@ -23,15 +25,12 @@ body {
     animation: gradientBG 15s ease infinite;
     color: var(--text-color);
     min-height: 100dvh;
-    /* Use dvh for better mobile support */
     width: 100%;
     display: grid;
-    /* Use grid for easy centering */
     place-items: center;
     overflow-x: hidden;
     position: relative;
     padding: 1rem;
-    /* Ensure padding on all screen sizes */
 }
 
 @keyframes gradientBG {
@@ -135,7 +134,21 @@ body {
     justify-content: center;
     align-items: center;
     min-height: auto;
-    /* Let content dictate height */
+}
+
+/* Animations */
+@keyframes floating {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }
 
 /* Screens */
@@ -149,7 +162,6 @@ body {
     transition: opacity 0.5s ease, transform 0.5s ease;
     transform: translateY(20px);
     padding: 1rem 0;
-    /* Add vertical breathing room */
 }
 
 .screen.active {
@@ -158,7 +170,57 @@ body {
     transform: translateY(0);
 }
 
-max-width: 90%;
+.screen.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+/* Slide Transitions */
+.slide-out-left {
+    transform: translateX(-50px);
+    opacity: 0;
+    transition: all 0.4s ease;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.4s ease forwards;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Typography */
+.title {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    background: linear-gradient(to right, #fff, #00d4ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    letter-spacing: 2px;
+    word-break: keep-all;
+    animation: floating 3s ease-in-out infinite;
+}
+
+.subtitle {
+    font-size: clamp(0.9rem, 4vw, 1rem);
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    margin-bottom: 3rem;
+    line-height: 1.8;
+    max-width: 90%;
 }
 
 /* Cards */
@@ -169,10 +231,107 @@ max-width: 90%;
     -webkit-backdrop-filter: blur(16px);
     border-radius: 20px;
     padding: clamp(1.5rem, 5vw, 2.5rem);
-    /* Responsive padding */
     width: 100%;
     box-shadow: var(--glass-shadow);
     color: white;
+}
+
+/* Chart Container */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    /* Explicit height */
+    margin: 0 auto 2rem auto;
+}
+
+/* Result Card Specifics for Scrolling */
+.result-card {
+    text-align: center;
+    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-height: 90vh;
+    /* Prevent overflow on small screens */
+    overflow-y: auto;
+    /* Allow scrolling inside card */
+    scrollbar-width: thin;
+    /* Firefox */
+    scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.1);
+}
+
+.result-card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.result-card::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 6px;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Result Text - Ensure no weird backgrounds */
+.result-desc,
+.result-title,
+.result-label {
+    background: transparent !important;
+}
+
+.result-label {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+}
+
+.result-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #ffffff, #a0a0a0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.3;
+}
+
+.result-desc {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.job-recommendation {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+    border-left: 4px solid var(--secondary-color);
+    text-align: left;
+}
+
+.job-recommendation span {
+    display: block;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 0.3rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 /* Buttons */
@@ -267,7 +426,6 @@ max-width: 90%;
     transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     display: flex;
     align-items: center;
-    /* Vertically align label and text */
     overflow: hidden;
 }
 
@@ -280,7 +438,6 @@ max-width: 90%;
     font-weight: bold;
     font-size: 0.8rem;
     flex-shrink: 0;
-    /* Prevent label from shrinking on small screens */
 }
 
 .option-btn:hover {
@@ -294,73 +451,7 @@ max-width: 90%;
     transform: scale(0.98);
 }
 
-/* Result Screen */
-.result-card {
-    text-align: center;
-    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes popIn {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-.result-label {
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-}
-
-.result-title {
-    font-size: clamp(1.5rem, 6vw, 2rem);
-    margin-bottom: 1.5rem;
-    background: linear-gradient(to right, #ffffff, #a0a0a0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1.3;
-}
-
-.result-desc {
-    font-size: 1rem;
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 2rem;
-    text-align: left;
-}
-
-.job-recommendation {
-    background: rgba(0, 0, 0, 0.2);
-    padding: 1rem;
-    border-radius: 10px;
-    margin-bottom: 2rem;
-    border-left: 4px solid var(--secondary-color);
-    text-align: left;
-}
-
-.job-recommendation span {
-    display: block;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 0.3rem;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-/* Specific Media Query for Mobile to ensure absolute safety */
+/* Media Queries */
 @media (max-width: 480px) {
     .app-container {
         padding: 0;
@@ -382,6 +473,5 @@ max-width: 90%;
 
     .result-desc {
         font-size: 0.95rem;
-        /* Slightly smaller for density */
     }
 }
